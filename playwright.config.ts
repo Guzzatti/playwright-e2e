@@ -1,29 +1,35 @@
-import { PlaywrightTestConfig } from '@playwright/test';
+import { defineConfig } from '@playwright/test';
 
-const config: PlaywrightTestConfig = {
+export default defineConfig({
   testDir: 'src/scenarios',
   timeout: 120000,
   retries: 0,
+  expect: {
+    timeout: 30000,
+  },
   use: {
-    trace: 'on',
-    locale: 'pt-BR',
+    browserName: 'chromium',
     headless: true,
     viewport: { width: 1280, height: 720 },
     ignoreHTTPSErrors: true,
-    screenshot: 'on',
-    video: 'off'
-  },
-  expect: {
-    timeout: 30000
+    launchOptions: {
+      slowMo: 150,
+    },
+    trace: 'on',
+    screenshot: 'only-on-failure',
+    video: 'off',
+    locale: 'pt-BR',
+    actionTimeout: 10000,
+    navigationTimeout: 20000,
   },
   reporter: [
     [
       'html',
       {
         outputFolder: 'artifacts/report',
-        open: 'never'
-      }
-    ]
-  ]
-};
-export default config;
+        open: 'never',
+      },
+    ],
+    ['list'],
+  ],
+});
